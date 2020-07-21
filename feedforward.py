@@ -42,8 +42,8 @@ def flatten(x_train, y_train, options):
     # mnist dataset comes in the shape (m, x, y), without color
     # with color stuff can be just flattened with a * 3 at the end
     x = (x_train.reshape(x_train.shape[0], x_train.shape[1] * x_train.shape[2]))/255
-    y = (y_train.reshape(y_train.shape[0], options))/10
-    return x.T, y.T+0.1
+    y = (y_train.reshape(y_train.shape[0], options))/100
+    return x.T, y.T+0.01
 
 def preprocess(options):
     # load and prepare data
@@ -96,8 +96,9 @@ def cost(Y, A, m):
     return J
 
 def eff(Y_gen, Y, m):
-    p = (1/m)*(np.sum(np.divide(Y_gen, Y)))
-    return p*100
+    
+    p = (1/m)*(np.sum(np.abs(Y_gen - Y)))
+    return (1-p)*100
 
 """
 model: Aggregate of all the functions at a time, and running the optimizations a number of time to get the best possible value
@@ -160,4 +161,4 @@ if __name__ == "__main__":
             params = pickle.load(p)
         modelExists(params, X_train, Y_train, X_test, Y_test, [0, 5, 4, 3, 4, 5, opt])
     else:
-        model(X_train, Y_train, X_test, Y_test, [0, 5, 4, 3, 4, 5, opt], 1, 100)
+        model(X_train, Y_train, X_test, Y_test, [0, 5, 4, 3, 4, 5, opt], 1, 10)
